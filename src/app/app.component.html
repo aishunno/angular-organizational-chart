@@ -1,0 +1,41 @@
+<div class="app">
+  <div class="container p-5">
+    <ol class="organizational-chart">
+      <li>
+        <ng-container *ngFor="let employee of employees">
+          <div class="organizational-chart__node">
+            <img class="organizational-chart__node--img"
+                 src="{{ employee.profile_image_url }}" alt="" srcset="">
+            <span class="organizational-chart__node--person-name"> {{ employee.name }} </span>
+            <ng-container *ngFor="let field of fields">
+              <span class="organizational-chart__node--person-designation"> {{ employee[field] }} </span>
+            </ng-container>
+          </div>
+
+          <ng-container *ngIf="employee.children">
+            <ng-container *ngTemplateOutlet="recursiveList; context: { $implicit: employee.children}"></ng-container>
+          </ng-container>
+        </ng-container>
+      </li>
+    </ol>
+  </div>
+
+  <ng-template #recursiveList let-employees>
+    <ol>
+      <li *ngFor="let employee of employees">
+        <div class="organizational-chart__node">
+          <img class="organizational-chart__node--img" src="{{ employee.profile_image_url }}" alt="">
+          <span class="organizational-chart__node--person-name">{{ employee.name }}</span>
+
+          <ng-container *ngFor="let field of fields">
+            <span class="organizational-chart__node--person-designation"> {{ employee[field] }} </span>
+          </ng-container>
+        </div>
+
+        <ng-container *ngIf="employee.children">
+          <ng-container *ngTemplateOutlet="recursiveList; context: { $implicit: employee.children }"></ng-container>
+        </ng-container>
+      </li>
+    </ol>
+  </ng-template>
+</div>
